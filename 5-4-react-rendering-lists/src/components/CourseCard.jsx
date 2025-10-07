@@ -39,20 +39,20 @@ export default function CourseCard({ course, index, onMutateCourse }) {
       {course.tasks.length === 0 ? (
         <p className="emptyMsg">No tasks yet. Add your first one below.</p>
       ) : (
-        <>
-          <ul className="tasks">
-            {course.tasks.map(task => (
-              <TaskItem
-                key={task.id}
-                task={task}
-                onToggle={toggleTask}
-                onDelete={deleteTask}
-              />
-            ))}
-          </ul>
-          {allDone && <p className="emptyMsg">All caught up!</p>}
-        </>
+        <ul className="tasks">
+          {course.tasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggle={toggleTask}
+              onDelete={deleteTask}
+            />
+          ))}
+        </ul>
       )}
+
+      {/* Task 3: Show badge when all done */}
+      {allDone && "All caught up!"}
 
       <form onSubmit={addTask} className="newTask">
         <input
