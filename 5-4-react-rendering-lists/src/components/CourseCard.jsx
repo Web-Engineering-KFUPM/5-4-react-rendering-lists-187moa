@@ -17,10 +17,11 @@ export default function CourseCard({ course, index, onMutateCourse }) {
 
   function addTask(e) {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || !date) return;
+    const id = Date.now().toString();
     onMutateCourse(index, tasks => [
       ...tasks,
-      { id: Date.now().toString(), title, dueDate: date, isDone: false }
+      { id, title, dueDate: date, isDone: false }
     ]);
     setTitle("");
     setDate("");
@@ -38,16 +39,19 @@ export default function CourseCard({ course, index, onMutateCourse }) {
       {course.tasks.length === 0 ? (
         <p className="emptyMsg">No tasks yet. Add your first one below.</p>
       ) : (
-        <ul className="tasks">
-          {course.tasks.map(task => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onToggle={toggleTask}
-              onDelete={deleteTask}
-            />
-          ))}
-        </ul>
+        <>
+          <ul className="tasks">
+            {course.tasks.map(task => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                onToggle={toggleTask}
+                onDelete={deleteTask}
+              />
+            ))}
+          </ul>
+          {allDone && <p className="emptyMsg">All caught up!</p>}
+        </>
       )}
 
       <form onSubmit={addTask} className="newTask">
