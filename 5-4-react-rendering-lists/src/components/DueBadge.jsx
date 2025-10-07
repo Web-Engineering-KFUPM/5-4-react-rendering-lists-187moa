@@ -11,9 +11,11 @@ export default function DueBadge({ dueDate }) {
   const d = daysUntil(dueDate);
   const label = d < 0 ? "Overdue" : d === 0 ? "Due today" : d === 1 ? "1 day remaining" : `${d} days remaining`;
 
-  return (
-    <span className={`badge${d < 0 ? " danger" : d === 0 ? " warn" : ""}`}>
-      {label}
-    </span>
+  return d < 0 ? (
+    <span className="badge danger">{label}</span>
+  ) : d === 0 ? (
+    <span className="badge warn">{label}</span>
+  ) : (
+    <span className="badge">{label}</span>
   );
 }
