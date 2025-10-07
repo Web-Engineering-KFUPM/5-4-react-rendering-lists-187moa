@@ -6,26 +6,50 @@ export default function CourseCard({ course, index, onMutateCourse }) {
   const [date, setDate] = useState("");
 
   function toggleTask(id) {
-   
+    onMutateCourse(index, tasks =>
+      tasks.map(t => t.id === id ? { ...t, isDone: !t.isDone } : t)
+    );
   }
 
   function deleteTask(id) {
-    
+    onMutateCourse(index, tasks => tasks.filter(t => t.id !== id));
   }
 
   function addTask(e) {
     e.preventDefault();
-   
+    if (!title.trim()) return;
+    onMutateCourse(index, tasks => [
+      ...tasks,
+      { id: Date.now().toString(), title, dueDate: date, isDone: false }
+    ]);
+    setTitle("");
+    setDate("");
   }
+
+  const allDone = course.tasks.length > 0 && course.tasks.every(t => t.isDone);
 
   return (
     <article className="course card">
       <header className="cardHeader">
         <h2>{course.title}</h2>
- 
+        {allDone && <span className="badge success">All caught up</span>}
       </header>
 
-    
+      {course.tasks.length === 0 ? (
+        <p className="emptyMsg">No tasks yet. Add your first one below.</p>
+      ) : (
+        <ul className="tasks">
+          {course.tasks.map(task => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              onToggle={toggleTask}
+              onDelete={deleteTask}
+            />
+          ))}
+        </ul>
+      )}
+
       <form onSubmit={addTask} className="newTask">
         <input
           className="titleField"
